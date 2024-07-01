@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ShippingMapper">
+    <select id="findAll" parameterType="hashmap" resultType="com.kb.shop.domain.dto.ShippingInfoDto">
+        SELECT * FROM SHIPPING_INFO
+    </select>
+    <insert id="insert" parameterType="com.kb.shop.domain.dto.CreateShippingInfoDto">
+        INSERT INTO SHIPPING_INFO(id, order_id, order_item_id, shipping_status) VALUES (#{id}, #{orderId}, #{orderItemId}, #{shippingStatus})
+    </insert>
+    
+<!--    <update id="">-->
+
+<!--    </update>-->
+<!--    <delete id="">-->
+
+<!--    </delete>-->
+</mapper>
