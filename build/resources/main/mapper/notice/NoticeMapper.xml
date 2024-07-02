@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.shop.repository.NoticeRepository">
+    <!--전체조회-->
+    <select id="findAllNotice" resultType="com.kb.shop.vo.Notice">
+        SELECT * FROM NOTICE
+    </select>
+
+    <!--상세조회-->
+    <select id="findNotice">
+        SELECT * FROM NOTICE WHERE ID=#{id}
+    </select>
+
+    <!--공지사항 만들기-->
+    <insert id="registerNotice">
+        INSERT INTO NOTICE (TITLE, CNT, REGI_ID, REGI_NAME, REGI_TIME)
+        VALUES(#{request.title}, #{request.cnt}, #{request.regiId}, #{request.regiName},#{request.regiTime})
+    </insert>
+
+    <!--공지사항 수정하기-->
+    <update id="modifyNotice">
+        UPDATE NOTICE
+        SET TITLE = #{request.title}, CNT = #{request.cnt}, REGI_ID = #{request.regiId},
+            REGI_NAME = #{request.regiName}, REGI_TIME = #{request.regiTime}
+        WHERE ID=#{request.id}
+    </update>
+
+    <!--공지사항 삭제하기-->
+    <delete id="deleteNotice">
+        DELETE FROM NOTICE WHERE id=#{id}
+    </delete>
+</mapper>
