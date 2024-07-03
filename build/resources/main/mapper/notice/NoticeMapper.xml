@@ -8,25 +8,32 @@
 
     <!--상세조회-->
     <select id="findNotice">
-        SELECT * FROM NOTICE WHERE ID=#{id}
+        SELECT * FROM NOTICE WHERE 공지사항일련번호=#{id}
     </select>
 
     <!--공지사항 만들기-->
+    <!--
     <insert id="registerNotice">
         INSERT INTO NOTICE (TITLE, CNT, REGI_ID, REGI_NAME, REGI_TIME)
         VALUES(#{request.title}, #{request.cnt}, #{request.regiId}, #{request.regiName},#{request.regiTime})
+    </insert>
+    -->
+    <insert id="registerNotice">
+        INSERT INTO NOTICE (공지사항제목, 공지사항내용, 등록직원번호, 등록직원명, 등록일시)
+        VALUES(#{request.공지사항제목}, #{request.공지사항내용}, #{request.등록직원번호},
+               #{request.등록직원명},#{request.등록일시})
     </insert>
 
     <!--공지사항 수정하기-->
     <update id="modifyNotice">
         UPDATE NOTICE
-        SET TITLE = #{request.title}, CNT = #{request.cnt}, REGI_ID = #{request.regiId},
-            REGI_NAME = #{request.regiName}, REGI_TIME = #{request.regiTime}
-        WHERE ID=#{request.id}
+        SET 공지사항제목 = #{request.공지사항제목}, 공지사항내용 = #{request.공지사항내용}, 등록직원번호 = #{request.등록직원번호},
+            등록직원명 = #{request.등록직원명}, 등록일시 = #{request.등록일시}
+        WHERE 공지사항일련번호=#{request.공지사항일련번호}
     </update>
 
     <!--공지사항 삭제하기-->
     <delete id="deleteNotice">
-        DELETE FROM NOTICE WHERE id=#{id}
+        DELETE FROM NOTICE WHERE 공지사항일련번호=#{id}
     </delete>
 </mapper>

@@ -53,7 +53,7 @@ public class NoticeController {
     }
 
     //공지사항 수정하기
-    @PostMapping("/modify")
+    @PutMapping("/modify")
     public ResponseEntity<ResponseDto> modifyNotice(@RequestBody RequestDto requestDto) {
         System.out.println("hello 호동 공지사항 수정할꾸얌");
         int result = noticeService.modifyNotice(requestDto);
@@ -75,7 +75,9 @@ public class NoticeController {
     @PostMapping("/delete")
     public ResponseEntity<ResponseDto> deleteNotice(@RequestBody RequestDto requestDto) {
         System.out.println("hello 호동 공지사항 삭제할꾸얌");
-        int result = noticeService.deleteNotice(requestDto.getId());
+        System.out.println(requestDto.get공지사항일련번호());
+        System.out.println("-----------------------------");
+        int result = noticeService.deleteNotice(requestDto.get공지사항일련번호());
 
         String msg;
         String state;
