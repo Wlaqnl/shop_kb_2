@@ -1,35 +1,52 @@
 package com.kb.shop.controller;
 
-import com.kb.shop.dto.RequestDto;
-import com.kb.shop.dto.ResponseDto;
+import com.kb.shop.dto.*;
 import com.kb.shop.service.NoticeService;
 import com.kb.shop.vo.Notice;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/notice")
+@RequiredArgsConstructor
 public class NoticeController {
 
     @Autowired
     private NoticeService noticeService;
 
     //전체조회
-    @GetMapping("/findAll")
-    public ResponseEntity<List<Notice>> findAllNotice() {
-        System.out.println("hello 호동 전체조회 할꾸얌");
-        List<Notice> noticeList = noticeService.findAllNotice();
-        return ResponseEntity.ok().body(noticeList);
+    @PostMapping("/findAll")
+    public ResponseEntity<FindNoticeResponseDto> findAllNotice(@RequestBody FindNoticeRequestDto requestDto) {
+        System.out.println("hello 전체조회 할꾸얌");
+        System.out.println(requestDto);
+
+        List<Notice> noticeList = noticeService.findAllNotice(requestDto);
+        int totalCount = noticeService.findAllNoticeTotalCount(requestDto);
+        int totalPage = totalCount / requestDto.getPageSize();
+        if (totalCount % requestDto.getPageSize() > 0) totalPage += 1;
+
+        FindNoticePaginationDto paginationDto = FindNoticePaginationDto.builder()
+                .pageNo(requestDto.getPageNo())
+                .pageSize(requestDto.getPageSize())
+                .totalPage(totalPage)
+                .totalContents(totalCount)
+                .build();
+        FindNoticeResponseDto responseDto = FindNoticeResponseDto.builder()
+                .contents(noticeList)
+                .pagination(paginationDto)
+                .build();
+
+        return ResponseEntity.ok().body(responseDto);
     }
 
     //상세조회
     @GetMapping("/detail/{id}")
     public ResponseEntity<List<Notice>> findNotice(@PathVariable Long id) {
-        System.out.println("hello 호동 상세조회 할꾸얌");
+        System.out.println("hello 상세조회 할꾸얌");
         List<Notice> noticeDetail = noticeService.findNotice(id);
         return ResponseEntity.ok().body(noticeDetail);
     }
@@ -37,7 +54,7 @@ public class NoticeController {
     //공지사항 만들기
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerNotice(@RequestBody RequestDto requestDto) {
-        System.out.println("hello 호동 공지사항 만들꾸얌");
+        System.out.println("hello 공지사항 만들꾸얌");
         int result = noticeService.registerNotice(requestDto);
 
         String msg;
@@ -55,7 +72,7 @@ public class NoticeController {
     //공지사항 수정하기
     @PutMapping("/modify")
     public ResponseEntity<ResponseDto> modifyNotice(@RequestBody RequestDto requestDto) {
-        System.out.println("hello 호동 공지사항 수정할꾸얌");
+        System.out.println("hello 공지사항 수정할꾸얌");
         int result = noticeService.modifyNotice(requestDto);
 
         String msg;
@@ -74,7 +91,7 @@ public class NoticeController {
     //공지사항 삭제하기
     @PostMapping("/delete")
     public ResponseEntity<ResponseDto> deleteNotice(@RequestBody RequestDto requestDto) {
-        System.out.println("hello 호동 공지사항 삭제할꾸얌");
+        System.out.println("hello 공지사항 삭제할꾸얌");
         System.out.println(requestDto.get공지사항일련번호());
         System.out.println("-----------------------------");
         int result = noticeService.deleteNotice(requestDto.get공지사항일련번호());

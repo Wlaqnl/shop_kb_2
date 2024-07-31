@@ -2,38 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kb.shop.repository.NoticeRepository">
     <!--전체조회-->
-    <select id="findAllNotice" resultType="com.kb.shop.vo.Notice">
+    <select id="findAllNotice" parameterType="com.kb.shop.dto.FindNoticeRequestDto" resultType="com.kb.shop.vo.Notice">
         SELECT * FROM NOTICE
+        WHERE 1 = 1
+        <if test="searchTitle != null and searchTitle != ''.toString()">
+            AND 공지사항제목 LIKE CONCAT('%',#{searchTitle},'%')
+        </if>
+        <if test="searchRegiEmp != null and searchRegiEmp != ''.toString()">
+            AND 등록직원명 LIKE CONCAT('%',#{searchRegiEmp},'%')
+        </if>
+        ORDER BY
+        <if test="orderTitle != null and orderTitle != ''.toString()">
+            공지사항제목
+            <if test="orderTitle == 'DESC'">
+                DESC,
+            </if>
+            <if test="orderTitle != 'DESC'">
+                ASC,
+            </if>
+        </if>
+        <if test="orderRegiEmp != null and orderRegiEmp != ''.toString()">
+            등록직원명
+            <if test="orderRegiEmp == 'DESC'">
+                DESC,
+            </if>
+            <if test="orderRegiEmp != 'DESC'">
+                ASC,
+            </if>
+        </if>
+        공지사항일련번호 DESC
+
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="findAllNoticeTotalCount" parameterType="com.kb.shop.dto.FindNoticeRequestDto" resultType="int">
+        SELECT COUNT(1) FROM NOTICE
+        WHERE 1 = 1
+        <if test="searchTitle != null and searchTitle != ''.toString()">
+            AND 공지사항제목 LIKE CONCAT('%',#{searchTitle},'%')
+        </if>
+        <if test="searchRegiEmp != null and searchRegiEmp != ''.toString()">
+            AND 등록직원명 LIKE CONCAT('%',#{searchRegiEmp},'%')
+        </if>
     </select>
 
     <!--상세조회-->
     <select id="findNotice">
-        SELECT * FROM NOTICE WHERE 공지사항일련번호=#{id}
+        SELECT *
+        FROM NOTICE
+        WHERE 공지사항일련번호 = #{id}
     </select>
 
     <!--공지사항 만들기-->
-    <!--
-    <insert id="registerNotice">
-        INSERT INTO NOTICE (TITLE, CNT, REGI_ID, REGI_NAME, REGI_TIME)
-        VALUES(#{request.title}, #{request.cnt}, #{request.regiId}, #{request.regiName},#{request.regiTime})
-    </insert>
-    -->
     <insert id="registerNotice">
         INSERT INTO NOTICE (공지사항제목, 공지사항내용, 등록직원번호, 등록직원명, 등록일시)
-        VALUES(#{request.공지사항제목}, #{request.공지사항내용}, #{request.등록직원번호},
-               #{request.등록직원명},#{request.등록일시})
+        VALUES (#{request.공지사항제목}, #{request.공지사항내용}, #{request.등록직원번호},
+                #{request.등록직원명}, #{request.등록일시})
     </insert>
 
     <!--공지사항 수정하기-->
     <update id="modifyNotice">
         UPDATE NOTICE
-        SET 공지사항제목 = #{request.공지사항제목}, 공지사항내용 = #{request.공지사항내용}, 등록직원번호 = #{request.등록직원번호},
-            등록직원명 = #{request.등록직원명}, 등록일시 = #{request.등록일시}
-        WHERE 공지사항일련번호=#{request.공지사항일련번호}
+        SET 공지사항제목 = #{request.공지사항제목},
+            공지사항내용 = #{request.공지사항내용},
+            등록직원번호 = #{request.등록직원번호},
+            등록직원명  = #{request.등록직원명},
+            등록일시   = #{request.등록일시}
+        WHERE 공지사항일련번호 = #{request.공지사항일련번호}
     </update>
 
     <!--공지사항 삭제하기-->
     <delete id="deleteNotice">
-        DELETE FROM NOTICE WHERE 공지사항일련번호=#{id}
+        DELETE
+        FROM NOTICE
+        WHERE 공지사항일련번호 = #{id}
     </delete>
 </mapper>
