@@ -30,6 +30,9 @@
                 ASC,
             </if>
         </if>
+<!--          <foreach collection="sort" item="item" separator="," >-->
+<!--              #{item.column} <if test="item.desc">DESC</if> <if test="!item.desc">ASC</if>-->
+<!--          </foreach>-->
         공지사항일련번호 DESC
 
         LIMIT #{offset}, #{pageSize}
