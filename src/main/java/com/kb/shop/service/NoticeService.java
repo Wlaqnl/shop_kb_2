@@ -2,6 +2,7 @@ package com.kb.shop.service;
 
 import com.kb.shop.dto.FindNoticeRequestDto;
 import com.kb.shop.dto.RequestDto;
+import com.kb.shop.dto.test.TestNoticeRequestDto;
 import com.kb.shop.repository.NoticeRepository;
 import com.kb.shop.vo.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,13 @@ import java.util.List;
 public class NoticeService {
     @Autowired
     private NoticeRepository noticeRepository;
+
+    //전체조회2
+    public List<Notice> findAllNotices(TestNoticeRequestDto requestDto){
+        System.out.println("전체조회2 가즈아");
+        System.out.println("requestDto : " + requestDto);
+        return noticeRepository.findAllNotices(requestDto);
+    }
 
     //전체조회
     public List<Notice> findAllNotice(FindNoticeRequestDto requestDto){
