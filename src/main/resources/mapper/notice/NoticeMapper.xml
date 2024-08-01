@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kb.shop.repository.NoticeRepository">
+    <!--전체조회2-->
+    <select id="findAllNotices" parameterType="com.kb.shop.dto.test.TestNoticeRequestDto"
+            resultType="com.kb.shop.vo.Notice">
+        SELECT * FROM NOTICE
+        WHERE 1=1
+        <foreach collection="search" item="it">
+            AND ${it.category}
+            <if test="it.isLike">LIKE CONCAT('%',#{it.value},'%')</if>
+            <if test="!it.isLike">= #{it.value}</if>
+        </foreach>
+        ORDER BY
+        <choose>
+            <when test="pagination.sortColumn != null and pagination.sortColumn != ''">
+                ${pagination.sortColumn}
+                <choose>
+                    <when test="pagination.reverse">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <otherwise>공지사항일련번호 DESC</otherwise>
+        </choose>
+        LIMIT #{pagination.offset}, #{pagination.pageSize}
+    </select>
+
     <!--전체조회-->
     <select id="findAllNotice" parameterType="com.kb.shop.dto.FindNoticeRequestDto" resultType="com.kb.shop.vo.Notice">
         SELECT * FROM NOTICE
@@ -30,9 +54,9 @@
                 ASC,
             </if>
         </if>
-<!--          <foreach collection="sort" item="item" separator="," >-->
-<!--              #{item.column} <if test="item.desc">DESC</if> <if test="!item.desc">ASC</if>-->
-<!--          </foreach>-->
+        <!--          <foreach collection="sort" item="item" separator="," >-->
+        <!--              #{item.column} <if test="item.desc">DESC</if> <if test="!item.desc">ASC</if>-->
+        <!--          </foreach>-->
         공지사항일련번호 DESC
 
         LIMIT #{offset}, #{pageSize}

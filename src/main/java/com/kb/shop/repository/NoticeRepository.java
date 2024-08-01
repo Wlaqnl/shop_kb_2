@@ -2,6 +2,7 @@ package com.kb.shop.repository;
 
 import com.kb.shop.dto.FindNoticeRequestDto;
 import com.kb.shop.dto.RequestDto;
+import com.kb.shop.dto.test.TestNoticeRequestDto;
 import com.kb.shop.vo.Notice;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +13,9 @@ import java.util.List;
 @Mapper
 @Repository
 public interface NoticeRepository {
+
+    //전체조회2
+    List<Notice> findAllNotices(TestNoticeRequestDto requestDto);
 
     //전체조회
     List<Notice> findAllNotice(FindNoticeRequestDto requestDto);

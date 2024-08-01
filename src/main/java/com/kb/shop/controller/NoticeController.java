@@ -1,6 +1,7 @@
 package com.kb.shop.controller;
 
 import com.kb.shop.dto.*;
+import com.kb.shop.dto.test.TestNoticeRequestDto;
 import com.kb.shop.service.NoticeService;
 import com.kb.shop.vo.Notice;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,16 @@ public class NoticeController {
 
     @Autowired
     private NoticeService noticeService;
+
+    //전체조회2
+    @PostMapping("/findAllNotices")
+    public void findAllNotices(@RequestBody TestNoticeRequestDto requestDto){
+        System.out.println("전체조회2 가즈아~");
+        System.out.println(requestDto);
+
+        List<Notice> noticeList = noticeService.findAllNotices(requestDto);
+        System.out.println("noticeList : " + noticeList);
+    }
 
     //전체조회
     @PostMapping("/findAll")
